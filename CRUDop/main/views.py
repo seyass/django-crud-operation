@@ -7,14 +7,10 @@ def signup(request):
     user = None
     error_message = None
     if request.POST:
-        userid = request.POST.get('userid')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-        print(userid,password)
-        sig = userDetail(email=userid,password=password)
+        sig = userDetail(email=email,password=password)
         sig.save()
-        print(sig.email)
-        print(sig.password)
-        print(sig)
         return render(request,'signup.html',{'error':'User Created Successfully'})
 
 
@@ -29,7 +25,11 @@ def home_page(request):
     return render(request,'home.html')
 
 def admin_page(request):
-    return render(request,'admin.html')
+    
+    adminU = userDetail.objects.all()
+    
+
+    return render(request,'admin.html',{'adminU':adminU})
 
 def main_page(request):
     return render(request,'main.html')
