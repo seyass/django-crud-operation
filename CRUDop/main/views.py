@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from . models import userDetail
 
@@ -33,3 +33,7 @@ def admin_page(request):
 
 def main_page(request):
     return render(request,'main.html')
+
+def createUser(request):
+    formPage = True
+    return redirect(admin_page,{'formPage':formPage})

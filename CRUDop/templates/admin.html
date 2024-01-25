@@ -1,21 +1,61 @@
 {% extends 'main.html' %}
 
 {% block content %}
+    <div class="admin_mai">
+      <h1>This is admin pannel</h1>
+      <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mail</th>
+        <th scope="col">Password</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in adminU %}
+      <tr>
+        <th scope="row">1</th>
+        <th scope="row">2</th>
+        <th scope="row">{{ i.email }}</th>
+        <th scope="row">{{ i.password }}</th>
+      </tr>
+      {% endfor %}
+    </tbody>
+    
+  </table>
 
-<h1>This is admin pannel</h1>
+  <button name="createUser" type="button" class="btn btn-outline-success"><a href="{% url 'createUser' %}">Add user</a></button>
+  <button type="button" class="btn btn-outline-danger">Delete</button>
+
+</div>
+{% if formPage == True %}
+
+  <form method="POST" action="">
+    {% csrf_token %}
+      <div  class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+  {% endif %}
 
 
-<table>
-    <tr><th>Email</th><th>Password</th></tr>
-    {% for ilm in adminU %}
-    <tr>
-        <td>{{ ilm.email }}</td>
-        <td><p style="text-align: center;">{{ ilm.password }} </p></td>
-        
-        
-    </tr>
-    {% endfor %}
-</table>
+
+
+
+
 
 {% endblock %}
 
