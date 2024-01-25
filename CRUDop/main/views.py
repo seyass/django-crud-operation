@@ -19,6 +19,9 @@ def signup(request):
 
     return render(request,'signup.html',{'user':user,'error_message':error_message})
 def login_page(request):
+
+    
+
     return render(request,'login.html')
 
 def home_page(request):
@@ -36,4 +39,12 @@ def main_page(request):
 
 def createUser(request):
     formPage = True
-    return redirect(admin_page,{'formPage':formPage})
+    adminU = userDetail.objects.all()
+    if request.POST:
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        sig = userDetail(email=email,password=password)
+        sig.save()
+        return render(request,'admin.html',{'error':'User Created Successfully','adminU':adminU})
+
+    return render(request,'admin.html',{'adminU':adminU,'formPage':formPage})
