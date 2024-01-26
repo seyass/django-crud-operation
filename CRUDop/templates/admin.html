@@ -1,34 +1,107 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <div>
-      <h1>This is admin pannel</h1>
-      <table class="table table-hover table-dark">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Mail</th>
-        <th scope="col">Password</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for i in adminU %}
-      <tr>
-        <th scope="row">1</th>
-        <th scope="row">2</th>
-        <th scope="row">{{ i.email }}</th>
-        <th scope="row">{{ i.password }}</th>
-      </tr>
-      {% endfor %}
-    </tbody>
-    
+<div class="main12">
+  <div class="admin_pane">
+    <h1>This is admin pannel</h1>
+    <table class="table table-hover table-dark">
+      <thead>
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Mail</th>
+              <th scope="col">Password</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for i in adminU %}
+          <tr>
+              <td colspan="4">
+                  <div class="accordion accordion-flush" id="accordionFlushExample{{ loop.index }}">
+                      <div class="accordion-item">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#flush-collapse{{ loop.index }}" aria-expanded="false"
+                              aria-controls="flush-collapse{{ loop.index }}">
+                              <table class="table table-hover table-dark">
+                                  <thead>
+                                      <tr>
+                                          <th scope="row">{{ loop.index }}</th>
+                                          <th scope="row">{{ i.name }}</th>
+                                          <th scope="row">{{ i.email }}</th>
+                                          <th scope="row">{{ i.password }}</th>
+                                      </tr>
+                                  </thead>
+                              </table>
+                          </button>
+                          <div id="flush-collapse{{ loop.index }}"
+                              class="accordion-collapse collapse" aria-labelledby="flush-heading{{ loop.index }}"
+                              data-bs-parent="#accordionFlushExample{{ loop.index }}">
+                              <div class="accordion-body">
+                                  <button type="button" class="btn btn-outline-primary">Edit</button>
+                                  <button type="button" class="btn btn-outline-danger">Delete</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
   </table>
+</div>
+    
+    
+        
+    
+    
+    
+  </div>
+  
+  
+    
+    
+    
+  
+  
+  
+          <!-- <div class="accordion accordion-flush" id="accordionFlushExample">
+            {% for i in adminU %}
+            <div class="accordion-item">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  
+                  <table class="table table-hover table-dark">
+                    <tr>
+                      
+                      <th scope="row">1</th>
+                      <th scope="row">2</th>
+                      <th scope="row">{{ i.email }}</th>
+                      <th scope="row">{{ i.password }}</th>
+                    </tr>
+                  </table>
+                
+                </button>
+          
+            
+              <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                  <button type="button" class="btn btn-outline-primary">Edit</button>
+                  <button type="button" class="btn btn-outline-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div> -->
+        
+
+  
+<div> 
 
   <button name="createUser" type="button" class="btn btn-outline-success"><a href="{% url 'createUser' %}">Add user</a></button>
   <button type="button" class="btn btn-outline-danger">Delete</button>
 
 </div>
+
+
 {% if formPage == True %}
 
 
