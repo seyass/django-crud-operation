@@ -25,20 +25,6 @@
 
 
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let accordions = document.querySelectorAll('.accordion');
-
-        accordions.forEach(function (accordion, index) {
-            let button = accordion.querySelector('.accordion-button');
-            let collapseId = `flush-collapse${index + 1}`;
-            let collapseTarget = accordion.querySelector('.accordion-collapse');
-            button.setAttribute('data-bs-target', `#${collapseId}`);
-            collapseTarget.setAttribute('id', collapseId);
-        });
-    });
-</script>
-
 
 
 </body>

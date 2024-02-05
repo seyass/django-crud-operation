@@ -51,29 +51,17 @@ margin-left: 900px;
 font-size: 50px;
 
 }
-
-.accordion-button {
-    background-color: #041322; /* Change to your desired color */
-    color: #1c1c1c; /* Text color */
-    height: 40px;
-}
-
-/* Customize accordion body background color and text color */
-.accordion-body {
-    background-color: #030c15; /* Change to your desired color */
-    color: #000; /* Text color */
-}
-
-/* Customize accordion size */
-.accordion {
-    max-width: 100%; /* Set your desired maximum width */
-    
-}
-.admin_pane{
-    width: 50%;
-    background-color: #000;
-    margin-left: 25%;
+.adminHead{
     margin-top: 25px;
-    border-radius: 10px;
-    border-top: red;
+    border-color: black;
+    border-width: 20px;
+    height: 60px;
+    width: 100%;
+    text-align: center;
+    background-color: cornflowerblue;
+}
+
+.adminTable{
+    background-color: cornflowerblue;
+    width: 50%;
 }
