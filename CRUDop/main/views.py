@@ -1,55 +1,77 @@
 from django.shortcuts import render,redirect
 from django.db import IntegrityError
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
+from django.contrib import messages
+from .form import UserForm
+from django.views.decorators.cache import never_cache
+
+
+
 
 # Create your views here.
 def signup(request):
-    user = None
-    error_message = None
-    if request.POST:
+    if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        siguser = User.objects.create_user(username=username,email=email,password=password)
-        return render(request,'signup.html',{'error':'User Created Successfully'})
+        
+        if not (username and email and password):
+            error_message = "All fields are required."
+            return render(request, 'signup.html', {'error_message': error_message})
+        
+        try:
+            siguser = User.objects.create_user(username=username, email=email, password=password)
+            messages.success(request, 'Account created successfully. Please log in.')
+            return redirect('login')  # Assuming you have a login URL named 'login'
+        except Exception as e:
+            error_message = 'Usser already exist'
+            return render(request, 'signup.html', {'error_message': error_message})
 
-    return render(request,'signup.html',{'user':user,'error_message':error_message})
+    return render(request, 'signup.html')
+@never_cache
 def login_page(request):
     
     msg = None
-    # if 'email' in  request.session:
-    #     return redirect(home_page)
-    
     if request.POST:
-        email = request.POST['email']
+        username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(email=email,password=password)
+        user = authenticate(username=username,password=password)
         ai = User.objects.all()
-        print(email,password)
+        print(username,password)
         print(user)
         if user is not None:
-            request.session['email']=email
+            if user.is_superuser:
+                login(request,user)
+                request.session['username']=username
+                return redirect('admin_page')
+            login(request,user)
+            request.session['username']=username
             return redirect('home_page')
         else:
             return redirect('login')
 
+    else:
+        if 'username' in  request.session:
+            return redirect(home_page)
+        else:
+            return render(request,'login.html')
+
     
-
-    return render(request,'login.html')
-
+@never_cache
 def home_page(request):
-    if 'email' in request.session:
+    if 'username' in request.session:
         return render(request,'home.html')
-    return redirect(login_page)
-
+    else:
+        return redirect(login_page)
 
 def admin_page(request):
-    
-    adminU = User.objects.all()
-    
+    if 'username' in request.session:
 
-    return render(request,'admin.html',{'adminU':adminU})
+        adminU = User.objects.all
+        return render(request,'admin.html',{'adminU':adminU})
+    return  redirect(login_page)
+    
 
 def main_page(request):
     return render(request,'main.html')
@@ -73,13 +95,36 @@ def createUser(request):
             return redirect('admin_page')
         
         except IntegrityError:
-            # Handle the case where a user with the given email already exists
             message = 'User with this email already exists'
             return redirect('admin_page')
 
     return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage})
 
+
+@never_cache
 def logout_page(request):
-    if 'email' in request.session:
-        request.session.flush()
-    return redirect(login_page)
+    if 'username' in request.session:
+        del request.session['username']
+        logout(request)
+        return redirect(login_page)
+    
+  
+
+def delete(request,pk):
+    ins = User.objects.get(pk=pk)
+    ins.delete()
+    return redirect(admin_page)
+
+def edit(request, pk):
+    frm = True
+    inst = User.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        fm = UserForm(request.POST, instance=inst)
+        if fm.is_valid():
+            fm.save()
+            return redirect(admin_page)
+    else:
+        fm = UserForm(instance=inst)
+
+    return render(request, 'admin.html', {'fm': fm, 'frm': frm, 'inst': inst})

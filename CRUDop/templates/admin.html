@@ -1,33 +1,37 @@
 {% extends 'main.html' %}
 
 {% block content %}
-  <div class="adminHead">
-    <h1>Admin Panel</h1>
+  <div class="table-title">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>Manage users</h2>
+      </div>
+    </div>
   </div>
   <div class="adminTable">
     <h1>This is admin pannel</h1>
-    <table class="table table-hover adminTable">
+    <table class="table table-hover adminTable" id="adminTable">
       <thead>
           <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Mail</th>
-              <th scope="col">Password</th>
           </tr>
       </thead>
       <tbody>
           {% for i in adminU %}
+            {% if i.is_superuser == False %}
           <tr>
               
                   <td scope="row">{{ loop.index }}</td>
-                  <td scope="row">{{ i.name }}</td>
+                  <td scope="row">{{ i.username }}</td>
                   <td scope="row">{{ i.email }}</td>
-                  <td scope="row">{{ i.password }}</td>
-                  <td scope = 'row'><button type="button" class="btn btn-outline-success">Edit</button></td>
-                  <td scope = 'row'><button type="button" class="btn btn-outline-danger">Delete</button></td>
+                  <td scope = 'row'><button type="button" class="btn btn-outline-success"> <a href="{% url 'edit' i.id %}">Edit</a></button></td>
+                  <td scope = 'row'><button type="button" class="btn btn-outline-danger"> <a href="{% url 'delete' i.id %}">Delete</a></button></td>
               
               
           </tr>
+          {% endif %}
           {% endfor %}
       </tbody>
   </table>
@@ -66,6 +70,22 @@
   {% endif %}
     {% if message %}
     <h1>{{ message }}</h1>
+    {% endif %}
+    {% if frm %}
+    <form method="POST" action="" style="margin-top: 50px;">
+      {% csrf_token %}
+      <div  class="form-group">
+        <label for="exampleInputUsername1">User name</label>
+        <input value="{{ inst.username }}" name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username">
+      </div>
+      <div  class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input value="{{ inst.email }}" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
     {% endif %}
 
 

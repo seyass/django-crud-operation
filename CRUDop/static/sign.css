@@ -20,10 +20,10 @@
     margin-bottom: 5px;
     border-radius: 25px;
 }
-.center-div{
+/* .center-div{
     padding-top: 10%;
     background-image: linear-gradient(rgb(39, 155, 233),white);
-  }
+  } */
  
 .btn.btn-success{
 padding: .4em 2em;
@@ -51,17 +51,29 @@ margin-left: 900px;
 font-size: 50px;
 
 }
-.adminHead{
+/* .adminHead{
     margin-top: 25px;
     border-color: black;
     border-width: 20px;
     height: 60px;
     width: 100%;
     text-align: center;
-    background-color: cornflowerblue;
-}
+    background-color: rgb(3, 6, 13);
+} */
 
 .adminTable{
-    background-color: cornflowerblue;
+    background-color: rgb(9, 19, 36);
     width: 50%;
+}
+#adminTable{
+    background-color: white;
+}
+
+.table-title{
+    background: #435d7d !important;
+    color: #fff !important;
+    padding: 16px 30px !important;
+    min-width: 100% !important;
+    margin: -20px -25px 10px;
+    border-radius: 3px 3px 0 0;
 }
