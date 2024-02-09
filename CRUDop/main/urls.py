@@ -26,6 +26,7 @@ urlpatterns = [
     path('createUser/',views.createUser,name='createUser'),
     path('logout/',views.logout_page,name='logout_page'),
     path('delete/<pk>',views.delete,name='delete'),
-    path('edit/<pk>',views.edit,name='edit')
+    path('edit/<pk>',views.edit,name='edit'),
+    path('search/',views.search,name="search"),
     
 ]

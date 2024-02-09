@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.db import IntegrityError
+from django.db.models import Q
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -8,7 +9,8 @@ from django.views.decorators.cache import never_cache
 
 
 frm = False
-
+srb = False
+message = None
 # Create your views here.
 @never_cache
 def signup(request):
@@ -31,7 +33,7 @@ def signup(request):
             try:
                 siguser = User.objects.create_user(username=username, email=email, password=password,last_name=lastname,first_name=firstname)
                 messages.success(request, 'Account created successfully. Please log in.')
-                return redirect('login')  # Assuming you have a login URL named 'login'
+                return redirect('login') 
             except Exception as e:
                 error_message = 'Usser already exist'
                 return render(request, 'signup.html', {'error_message': error_message})
@@ -91,29 +93,34 @@ def admin_page(request):
 def main_page(request):
     return render(request,'main.html')
 
-
+@never_cache
 def createUser(request):
-    formPage = True
-    adminU = User.objects.all()
+    if 'isusername' in request.session:
+    
+        formPage = True
+        adminU = User.objects.all()
 
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        username = request.POST.get('username')
-        message = None
+        if request.method == 'POST':
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get("lastname")
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            username = request.POST.get('username')
+            message = None
 
-        try:
-            print('try')
-            user = User.objects.create_user(username=username,email=email, password=password)
-            message = 'User Created Successfully'
+            try:
+                print('try')
+                user = User.objects.create_user(username=username,email=email, password=password,first_name=firstname,last_name=lastname)
+                
+                return redirect('admin_page')
             
-            return redirect('admin_page')
-        
-        except IntegrityError:
-            message = 'User with this email already exists'
-            return redirect('admin_page')
+            except IntegrityError:
+                message = 'User with this email or username already exists'
+                return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage, 'error_message': message })
 
-    return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage})
+        return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage})
+    
+    return  redirect(login_page)
 
 
 @never_cache
@@ -129,28 +136,57 @@ def logout_page(request):
     return render(request,'login.html')
     
   
-
+@never_cache
 def delete(request,pk):
-    ins = User.objects.get(pk=pk)
-    ins.delete()
-    return redirect(admin_page)
+    if 'isusername' in request.session:
+        ins = User.objects.get(pk=pk)
+        ins.delete()
+        return redirect(admin_page)
 
-def edit(request, pk):
-    frm = True
-    inst = User.objects.get(id=pk)
-    adminU = User.objects.all
-    it = 0
-    for i in User.objects.values('id'):
-        if int(pk) == i['id']:
-            it = i['id']
-            break
+
+    return  redirect(login_page)
     
-    if request.method == 'POST':
-        fm = UserForm(request.POST, instance=inst)
-        if fm.is_valid():
-            fm.save()
-            return redirect(admin_page)
-    else:
-        fm = UserForm(instance=inst)
+    
+@never_cache
+def edit(request, pk):
 
-    return render(request, 'admin.html', {'fm': fm, 'frm': frm, 'inst': inst,'adminU':adminU,'it':it})
+    if 'isusername' in request.session:
+        frm = True
+        inst = User.objects.get(id=pk)
+        adminU = User.objects.all
+        it = 0
+        for i in User.objects.values('id'):
+            if int(pk) == i['id']:
+                it = i['id']
+                break
+        
+        if request.method == 'POST':
+            fm = UserForm(request.POST, instance=inst)
+            if fm.is_valid():
+                fm.save()
+                return redirect(admin_page)
+        else:
+            fm = UserForm(instance=inst)
+
+        return render(request, 'admin.html', {'fm': fm, 'frm': frm, 'inst': inst,'adminU':adminU,'it':it})
+    else:
+        return redirect(login_page)
+    
+
+def search(request):
+    srb = True
+    if 'isusername' in request.session:
+        if request.method == "POST":
+            q = request.POST.get('q')
+            adminU = User.objects.filter(Q(username__istartswith=q)).order_by('-date_joined')
+            if len(adminU):
+                return render(request, 'admin.html',{'srb':srb ,'adminU':adminU})
+            else:
+                message = 'There is no user found'
+                return render(request,'admin.html',{'srb':srb ,'adminU':adminU,'message':message})
+            #if user is not found then show message to the user that no users are available with this name  
+
+
+        return redirect(admin_page)
+    else:
+        return redirect(login_page)
