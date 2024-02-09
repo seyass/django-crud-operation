@@ -1,3 +1,5 @@
+
+
 .formm{
     margin-top: 50px;
 }
@@ -51,23 +53,6 @@ margin-left: 900px;
 font-size: 50px;
 
 }
-/* .adminHead{
-    margin-top: 25px;
-    border-color: black;
-    border-width: 20px;
-    height: 60px;
-    width: 100%;
-    text-align: center;
-    background-color: rgb(3, 6, 13);
-} */
-
-.adminTable{
-    background-color: rgb(9, 19, 36);
-    width: 50%;
-}
-#adminTable{
-    background-color: white;
-}
 
 .table-title{
     background: #435d7d !important;
@@ -76,4 +61,23 @@ font-size: 50px;
     min-width: 100% !important;
     margin: -20px -25px 10px;
     border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+    margin: 5px 0 0;
+    font-size: 24px;
+}
+.row {
+    margin-top: 20px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.headings{
+    width: 100%;
+}
+H1.headings{
+    text-align: center;
 }

@@ -1,21 +1,34 @@
 {% extends 'main.html' %}
 
 {% block content %}
+
+
+<div  class="container mt-5">
+
   <div class="table-title">
     <div class="row">
       <div class="col-sm-6">
-        <h2>Manage users</h2>
+        <h2>Manage <b>Users</b></h2>
+        
+      </div>
+      <div class="col-sm-6">
+        <a href="{% url 'createUser' %}" name="createUser" class="btn btn-success" data-toggle="modal"> <span>Add New User</span></a>		
+        <a class="btn btn-danger" href="{% url 'logout_page' %}"><span>Log out</span></a>			
       </div>
     </div>
   </div>
-  <div class="adminTable">
-    <h1>This is admin pannel</h1>
-    <table class="table table-hover adminTable" id="adminTable">
+  {% if frm == False %}
+  <div>
+    
+    <table class="table table-hover">
       <thead>
           <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last name</th>
+              <th scope="col">User name</th>
               <th scope="col">Mail</th>
+              <th scope="col">Actions</th>
           </tr>
       </thead>
       <tbody>
@@ -23,33 +36,35 @@
             {% if i.is_superuser == False %}
           <tr>
               
-                  <td scope="row">{{ loop.index }}</td>
+                  <td scope="row">{{ forloop.counter }}</td>
+                  <td scope="row">{{ i.first_name }}</td>
+                  <td scopte="row">{{ i.last_name }}</td>
                   <td scope="row">{{ i.username }}</td>
                   <td scope="row">{{ i.email }}</td>
-                  <td scope = 'row'><button type="button" class="btn btn-outline-success"> <a href="{% url 'edit' i.id %}">Edit</a></button></td>
-                  <td scope = 'row'><button type="button" class="btn btn-outline-danger"> <a href="{% url 'delete' i.id %}">Delete</a></button></td>
-              
-              
+                  <td>
+                    <a href="{% url 'edit' i.id %}" class="btn btn-success" data-toggle="modal">Edit</a>
+                    <a href="{% url 'delete' i.id %}" class="btn btn-danger" data-toggle="modal">Delete</a>
+                  </td>
+                  
+                  
           </tr>
           {% endif %}
           {% endfor %}
       </tbody>
   </table>
+  
 </div>
-    
+{% endif %}
 
-  
-<div> 
-
-  <button name="createUser" type="button" class="btn btn-outline-success"><a href="{% url 'createUser' %}">Add user</a></button>
-  
 
 </div>
+
 
 
 {% if formPage == True %}
 
 
+<!-- ____________________________________________________________________________________________________________________________ -->
   <form method="POST" action="" style="margin-top: 50px;">
     {% csrf_token %}
     <div  class="form-group">
@@ -71,20 +86,66 @@
     {% if message %}
     <h1>{{ message }}</h1>
     {% endif %}
+
+
+
     {% if frm %}
-    <form method="POST" action="" style="margin-top: 50px;">
-      {% csrf_token %}
-      <div  class="form-group">
-        <label for="exampleInputUsername1">User name</label>
-        <input value="{{ inst.username }}" name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username">
-      </div>
-      <div  class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input value="{{ inst.email }}" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-      </div>
-      
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="container">
+      <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">User name</th>
+                <th scope="col">Mail</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for i in adminU %}
+            {% if i.is_superuser == False %}
+            {% if i.id == it %}
+
+            <form method="POST" action="" style="margin-top: 50px;">
+              <tr>
+                {% csrf_token %}
+                   <td></td>
+                  <td scope="row"> <input value="{{ inst.first_name }}" name="first_name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username"></td>
+                  <td scope="row"> <input value="{{ inst.last_name }}" name="last_name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username"></td>
+                  <td scopte="row"><input value="{{ inst.username }}" name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username"></td>
+                  <td scope="row"> <input value="{{ inst.email }}" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username"></td>
+                  <td scope="row"><button type="submit" class="btn btn-primary">Submit</button></td>
+                </tr>
+                
+                
+          </form>
+            {% else %}
+            <tr>
+              <td scope="row">{{ loop.index }}</td>
+              <td scope="row">{{ i.first_name }}</td>
+              <td scopte="row">{{ i.last_name }}</td>
+              <td scope="row">{{ i.username }}</td>
+              <td scope="row">{{ i.email }}</td>
+              <td>
+                <a href="{% url 'edit' i.id %}" class="btn btn-success" data-toggle="modal">Edit</a>
+                <a href="{% url 'delete' i.id %}" class="btn btn-danger" data-toggle="modal">Delete</a>
+              </td>
+      </tr>
+            {% endif %}
+          
+          {% endif %}
+          
+
+          
+      {% endfor %}
+        </tbody>
+      </table>
+    
+    </div>
+    
+    
+
 
     {% endif %}
 
