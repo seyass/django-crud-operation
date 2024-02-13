@@ -3,7 +3,6 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
-from django.contrib import messages
 from .form import UserForm
 from django.views.decorators.cache import never_cache
 
@@ -11,6 +10,7 @@ from django.views.decorators.cache import never_cache
 frm = False
 srb = False
 message = None
+admin_btn = None
 # Create your views here.
 @never_cache
 def signup(request):
@@ -32,10 +32,9 @@ def signup(request):
             
             try:
                 siguser = User.objects.create_user(username=username, email=email, password=password,last_name=lastname,first_name=firstname)
-                messages.success(request, 'Account created successfully. Please log in.')
                 return redirect('login') 
             except Exception as e:
-                error_message = 'Usser already exist'
+                error_message = 'User already exist'
                 return render(request, 'signup.html', {'error_message': error_message})
 
         return render(request, 'signup.html')
@@ -43,40 +42,40 @@ def signup(request):
 def login_page(request):
     
     msg = None
+    if 'username' in  request.session:
+        return redirect(home_page)
+    elif 'isusername' in request.session:
+        return redirect(home_page)    
+    
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username,password=password)
         ai = User.objects.all()
-        print(username,password)
-        print(user)
         if user is not None:
             if user.is_superuser:
                 login(request,user)
                 request.session['isusername']=username
-                return redirect('admin_page')
+                return redirect(home_page)
             else:
+                
                 login(request,user)
                 request.session['username']=username
-                return redirect('home_page')
+                return redirect(home_page)
         else:
-            return redirect('login')
-
-    else:
-        if 'username' in  request.session:
-            return redirect(home_page)
-        elif 'isusername' in request.session:
-            return redirect(admin_page)    
-        else:
-            return render(request,'login.html')
-
+            msg = "Incorrect password or username"
+            return render(request,'login.html',{'msg':msg })
+    return render(request,"login.html")
     
 @never_cache
 def home_page(request):
+    
     if 'username' in request.session:
-        return render(request,'home.html')
+        admin_btn = False
+        return render(request,'home.html',{'admin_btn':admin_btn})
     elif 'isusername' in request.session:
-        return render(request,'home.html')
+        admin_btn = True
+        return render(request,'home.html',{ 'admin_btn' : admin_btn } )
     else:
         return redirect(login_page)
 
@@ -115,7 +114,7 @@ def createUser(request):
                 return redirect('admin_page')
             
             except IntegrityError:
-                message = 'User with this email or username already exists'
+                message = 'User with this username already exists'
                 return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage, 'error_message': message })
 
         return render(request, 'admin.html', {'adminU': adminU, 'formPage': formPage})
@@ -172,7 +171,7 @@ def edit(request, pk):
     else:
         return redirect(login_page)
     
-
+@never_cache
 def search(request):
     srb = True
     if 'isusername' in request.session:
@@ -184,7 +183,7 @@ def search(request):
             else:
                 message = 'There is no user found'
                 return render(request,'admin.html',{'srb':srb ,'adminU':adminU,'message':message})
-            #if user is not found then show message to the user that no users are available with this name  
+            
 
 
         return redirect(admin_page)

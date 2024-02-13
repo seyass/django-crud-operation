@@ -20,9 +20,13 @@
         <a class="nav-link" href="#">Services</a>
       </li>
       <li class="nav-item">
-        <a href="{% url 'logout_page' %}">Add user</a>
+        <a class="btn btn-danger" href="{% url 'logout_page' %}">Logout</a>
       </li>
-      
+      {% if admin_btn %}
+      <li style="margin-left: 25px;">
+        <a class="btn btn-primary" href="{% url 'admin_page' %}">Admin Dashboard</a>
+      </li>
+      {% endif %}
       
     </ul>
       <div class="chor">

@@ -46,18 +46,12 @@
             {% if i.is_superuser == False %}
           <tr>
               
-                  <td scope="row">{{ forloop.counter }}</td>
+                  <td scope="row">{{ i }}</td>
                   <td scope="row">{{ i.first_name }}</td>
                   <td scopte="row">{{ i.last_name }}</td>
                   <td scope="row">{{ i.username }}</td>
                   <td scope="row">{{ i.email }}</td>
                   <td>
-                    <!-- Button trigger modal -->
-
-
-<!-- Modal -->
-
-
                     <a href="{% url 'edit' i.id %}" class="btn btn-success" data-toggle="modal">Edit</a>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                       Delete
@@ -120,12 +114,6 @@
                   <td scope="row">{{ i.username }}</td>
                   <td scope="row">{{ i.email }}</td>
                   <td>
-                    <!-- Button trigger modal -->
-
-
-<!-- Modal -->
-
-
                     <a href="{% url 'edit' i.id %}" class="btn btn-success" data-toggle="modal">Edit</a>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                       Delete
@@ -148,8 +136,6 @@
                       </div>
                     </div>
                   </td>
-                  
-                  
           </tr>
           {% endif %}
           {% endfor %}
@@ -273,7 +259,26 @@
               <td scope="row">{{ i.email }}</td>
               <td>
                 <a href="{% url 'edit' i.id %}" class="btn btn-success" data-toggle="modal">Edit</a>
-                <a href="{% url 'delete' i.id %}" class="btn btn-danger" data-toggle="modal">Delete</a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Delete
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete confirm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h3>Are you sure, you want to delete?</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'delete' i.id %}" class="btn btn-danger" data-toggle="modal">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </td>
       </tr>
             {% endif %}

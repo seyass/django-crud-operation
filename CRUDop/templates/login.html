@@ -51,15 +51,14 @@
           <div class="divider d-flex align-items-center my-4">
             <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
           </div>
+          {% if msg %}
+            <h4>{{ msg }}</h4>
+          {% endif %}
 
           <a class="btn btn-primary btn-lg btn-block" style="background-color: #0c572b" href="{% url 'signup' %}"
             role="button">
             Don't have account
           </a>
-          
-                
-                
-      
               </form>
             </div>
           </div>
