@@ -17,6 +17,7 @@ This is a Django application that demonstrates basic CRUD (Create, Read, Update,
 - SQLite (default database)
 - HTML/CSS
 - JavaScript
+- Bootstrap
 
 ## Getting Started
 
