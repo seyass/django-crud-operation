@@ -25,7 +25,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### Prerequisites
 
-- Python (version 3.6+)
+- Python 
 - pip (Python package installer)
 - virtualenv (optional, but recommended)
 
