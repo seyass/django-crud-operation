@@ -33,8 +33,8 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/yourusername/your-repo-name.git
-    cd your-repo-name
+    git clone https://github.com/seyass/django-crud-operation.git
+    cd django-crud-operation
     ```
 
 2. **Create a virtual environment (optional, but recommended):**
